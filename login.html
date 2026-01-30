@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login | Union Webteck</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-body">
+<img src="images/logo.png" class="logo" style="height:80px;width:80px;margin-bottom:15px;">
+
+<div class="login-box">
+
+  <img src="images/logo.png" class="logo big-logo">
+  <h2 class="glow-text">Union Webteck</h2>
+
+  <!-- LOGIN FORM -->
+  <form id="loginForm">
+    <h3>Login</h3>
+
+    <input type="text" id="loginUser" placeholder="Username" required>
+    <input type="password" id="loginPass" placeholder="Password" required>
+
+    <button type="submit" class="btn-glow">Login</button>
+
+    <p class="switch-text">
+      Don't have an account?
+      <span onclick="showRegister()">Create Account</span>
+    </p>
+  </form>
+
+  <!-- REGISTER FORM -->
+  <form id="registerForm" style="display:none;">
+    <h3>Create Account</h3>
+
+    <input type="text" placeholder="Full Name" required>
+    <input type="tel" placeholder="Mobile Number" required>
+    <input type="text" placeholder="Username" required>
+    <input type="password" placeholder="Password" required>
+    <input type="password" placeholder="Confirm Password" required>
+
+    <button type="submit" class="btn-glow">Register</button>
+
+    <p class="switch-text">
+      Already have an account?
+      <span onclick="showLogin()">Login</span>
+    </p>
+  </form>
+
+</div>
+
+<!-- SCRIPT MUST BE AT BOTTOM -->
+<script>
+function showRegister(){
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("registerForm").style.display = "block";
+}
+
+function showLogin(){
+  document.getElementById("registerForm").style.display = "none";
+  document.getElementById("loginForm").style.display = "block";
+}
+
+document.getElementById("loginForm").onsubmit = function(e){
+  e.preventDefault();
+  alert("Login Successful!");
+  window.location.href = "dashboard.html";
+};
+
+document.getElementById("registerForm").onsubmit = function(e){
+  e.preventDefault();
+  alert("Account Created Successfully!");
+  showLogin();
+};
+</script>
+<script>
+const candleData = {
+  week: [
+    {x:'2025-01-01', o:2400, h:2500, l:2350, c:2450},
+    {x:'2025-01-02', o:2450, h:2550, l:2400, c:2520}
+  ],
+  month: [
+    {x:'2025-01-01', o:2200, h:2600, l:2100, c:2450}
+  ],
+  year: [
+    {x:'2024-01-01', o:1500, h:2600, l:1400, c:2450}
+  ]
+};
+
+function createCandle(id, color){
+  return new Chart(document.getElementById(id),{
+    type:'candlestick',
+    data:{ datasets:[{
+      label:'Price',
+      data:candleData.week,
+      color:{ up:color, down:'#ff4444', unchanged:color }
+    }]},
+    options:{ responsive:true }
+  });
+}
+
+function changeData(chart,type){
+  chart.data.datasets[0].data = candleData[type];
+  chart.update();
+}
+
+/* CREATE CHART */
+let relianceChart = createCandle("relianceChart","#00ffcc");
+
+/* LIVE PRICE ANIMATION */
+setInterval(()=>{
+  let price = document.getElementById("reliancePrice");
+  let val = 2400 + Math.floor(Math.random()*100);
+  price.innerText = "₹" + val;
+},1500);
+
+/* FULLSCREEN */
+function openModal(chartId){
+  document.getElementById("modal").style.display="block";
+  let ctx = document.getElementById("modalChart");
+  new Chart(ctx,{
+    type:'candlestick',
+    data:{ datasets:[{
+      data:candleData.week
+    }]},
+    options:{ responsive:true }
+  });
+}
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+</script>
+
+</body>
+</html>
